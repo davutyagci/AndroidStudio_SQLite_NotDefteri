@@ -23,32 +23,19 @@
         android:gravity="start" />
 
     <Button
-        android:text="Kaydet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/bt_notduzenlekaydet"
-        android:layout_marginStart="48dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/et_notduzenle"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="16dp"
-        android:onClick="BtNotGuncelle" />
-
-    <Button
         android:text="sil"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/bt_notduzenlesil"
-        android:layout_marginStart="16dp"
-        app:layout_constraintLeft_toRightOf="@+id/bt_notduzenlekaydet"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@+id/et_notduzenle"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="16dp"
-        app:layout_constraintRight_toLeftOf="@+id/bt_notlargit"
-        android:layout_marginEnd="16dp"
-        android:onClick="BtNotSil" />
+        android:onClick="BtNotSil"
+        android:fontFamily="serif-monospace"
+        style="@android:style/Widget.Button"
+        android:layout_marginStart="96dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <Button
         android:text="Notlar"
@@ -59,9 +46,11 @@
         app:layout_constraintTop_toBottomOf="@+id/et_notduzenle"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="16dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginEnd="96dp"
         app:layout_constraintRight_toRightOf="parent"
-        android:onClick="BtNotlarGit" />
+        android:onClick="BtNotlarGit"
+        android:fontFamily="serif-monospace"
+        style="@android:style/Widget.Button" />
 
     <TextView
         android:layout_width="30dp"
@@ -69,5 +58,17 @@
         android:id="@+id/tv_idgor"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:gravity="center_vertical|center_horizontal" />
+        android:gravity="center_vertical|center_horizontal"
+        android:visibility="invisible" />
+
+    <TextView
+        android:text="00.00.0000"
+        android:layout_width="76dp"
+        android:layout_height="20dp"
+        android:id="@+id/tv_tarihduzenle"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        android:gravity="end" />
 </android.support.constraint.ConstraintLayout>

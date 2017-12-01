@@ -10,25 +10,29 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class NotListele extends AppCompatActivity {
 
     VeriTabani veriTabani;
-    ListView notListele, idListele;
-    ArrayList<String> NotIdListele, NotListele;
+    ListView notListele, idListele, tarihListele;
+    ArrayList<String> NotIdListele, NotListele, TarihListele;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_not_listele);
         veriTabani = new VeriTabani(this);
-        notListele = (ListView)findViewById(R.id.lv_notListele);
         idListele = (ListView)findViewById(R.id.lv_idListele);
+        notListele = (ListView)findViewById(R.id.lv_notListele);
+        tarihListele = (ListView)findViewById(R.id.lv_notListele);
 
         NotIdListele = veriTabani.NotIdListele();
         NotListele = veriTabani.NotListele();
+        TarihListele = veriTabani.TarihListele();
 
         Not_Id_ListeleAdapter Not_Id_ListeleAdapter = new Not_Id_ListeleAdapter();
         idListele.setAdapter(Not_Id_ListeleAdapter);
@@ -42,6 +46,11 @@ public class NotListele extends AppCompatActivity {
                 startActivity(git);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.finishAffinity();
     }
 
     class Not_Id_ListeleAdapter extends BaseAdapter {
@@ -61,9 +70,11 @@ public class NotListele extends AppCompatActivity {
             convertView = getLayoutInflater().inflate(R.layout.custom_listview, null);
             TextView tv_idListele = (TextView)convertView.findViewById(R.id.tv_idListele);
             TextView tv_notListele = (TextView)convertView.findViewById(R.id.tv_notListele);
+            TextView tv_tarihListele = (TextView)convertView.findViewById(R.id.tv_tarihListele);
 
             tv_idListele.setText(NotIdListele.get(position));
             tv_notListele.setText(NotListele.get(position));
+            tv_tarihListele.setText(TarihListele.get(position));
 
             return convertView;
         }
@@ -73,12 +84,6 @@ public class NotListele extends AppCompatActivity {
         ArrayList<String> al = veriTabani.NotListele();
         ArrayAdapter<String> ad = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, al);
         notListele.setAdapter(ad);
-    }
-
-    public void LvNotIdListele() {
-        ArrayList<String> al = veriTabani.NotIdListele();
-        ArrayAdapter<String> ad = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, al);
-        idListele.setAdapter(ad);
     }
 
     public void BtYeniNotGit(View v) {

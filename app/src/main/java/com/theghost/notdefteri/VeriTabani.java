@@ -17,6 +17,7 @@ public class VeriTabani extends SQLiteOpenHelper {
 
     public static final String STN_ID = "ID";
     public static final String STN_NOT = "NOTLAR";
+    public static final String STN_TARIH = "TARIH";
 
     public VeriTabani(Context context) {
         super(context, VERITABANI_ADI, null, VERITABANI_VERSION);
@@ -24,7 +25,7 @@ public class VeriTabani extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("Create Table if not exists " + TABLO_ADI + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, NOTLAR TEXT);");
+        db.execSQL("Create Table if not exists " + TABLO_ADI + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, NOTLAR TEXT, TARIH TEXT);");
     }
 
     @Override
@@ -33,13 +34,24 @@ public class VeriTabani extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean NotKayit(String notkaydet) {
+    public boolean NotKayit(String notkaydet, String tarihkaydet) {
         SQLiteDatabase dbYaz = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(STN_NOT, notkaydet);
+        cv.put(STN_TARIH, tarihkaydet);
         long sonuc = dbYaz.insert(TABLO_ADI, null, cv);
         if(sonuc == -1) { return false; }
         else { return true; }
+    }
+
+    public ArrayList<String> NotIdListele() {
+        SQLiteDatabase dbOku = this.getReadableDatabase();
+        ArrayList<String> al = new ArrayList<>();
+        Cursor c = dbOku.rawQuery("Select * From " + TABLO_ADI, null);
+        while (c.moveToNext()) {
+            al.add(c.getString(0));
+        }
+        return al;
     }
 
     public ArrayList<String> NotListele() {
@@ -52,12 +64,12 @@ public class VeriTabani extends SQLiteOpenHelper {
         return al;
     }
 
-    public ArrayList<String> NotIdListele() {
+    public ArrayList<String> TarihListele() {
         SQLiteDatabase dbOku = this.getReadableDatabase();
         ArrayList<String> al = new ArrayList<>();
         Cursor c = dbOku.rawQuery("Select * From " + TABLO_ADI, null);
         while (c.moveToNext()) {
-            al.add(c.getString(0));
+            al.add(c.getString(2));
         }
         return al;
     }
@@ -72,12 +84,13 @@ public class VeriTabani extends SQLiteOpenHelper {
         return dbYaz.delete(TABLO_ADI, "ID = ?", new String[] {idsil});
     }
 
-    public boolean NotGuncelle (String idguncelle, String notguncelle) {
+    public boolean NotGuncelle (String idguncelle, String notguncelle, String tarihguncelle) {
         SQLiteDatabase dbYaz = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(STN_ID, idguncelle);
         cv.put(STN_NOT, notguncelle);
-        long sonuc = dbYaz.update(TABLO_ADI, cv, "ID = ?", new String[] {idguncelle});
+        cv.put(STN_TARIH, tarihguncelle);
+        dbYaz.update(TABLO_ADI, cv, "ID = ?", new String[] {idguncelle});
         return true;
     }
 }

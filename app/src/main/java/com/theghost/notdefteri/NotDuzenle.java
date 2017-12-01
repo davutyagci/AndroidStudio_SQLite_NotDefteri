@@ -10,11 +10,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
+
 public class NotDuzenle extends AppCompatActivity {
 
     VeriTabani veriTabani;
     EditText notduzenle;
-    TextView idgor;
+    TextView idgor, tarihduzenle;
+    Calendar TarihDuzenleCal;
+    int bugununyılı, bugunungunu, bugununayı;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,38 +27,61 @@ public class NotDuzenle extends AppCompatActivity {
         veriTabani = new VeriTabani(this);
         notduzenle = (EditText)findViewById(R.id.et_notduzenle);
         idgor = (TextView)findViewById(R.id.tv_idgor);
+        tarihduzenle = (TextView)findViewById(R.id.tv_tarihduzenle);
 
-        String idcek= getIntent().getStringExtra("IDCEK");
+        String idcek = getIntent().getStringExtra("IDCEK");
         idgor.setText(idcek.toString());
 
         EtNotGoster();
+        TarihDuzenle();
     }
 
     public void EtNotGoster() {
         SQLiteDatabase dbOku = veriTabani.NotCek();
         Cursor c = dbOku.rawQuery("Select * From  "+ veriTabani.TABLO_ADI +" Where ID = "+ idgor.getText().toString() +"", null);
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sbNot = new StringBuilder();
         while (c.moveToNext()) {
-            sb.append(c.getString(1));
+            sbNot.append(c.getString(1));
+
         }
-        notduzenle.setText(sb.toString());
+        notduzenle.setText(sbNot.toString());
+    }
+
+    public void TarihDuzenle() {
+        TarihDuzenleCal = Calendar.getInstance();
+        bugununyılı = TarihDuzenleCal.get(Calendar.YEAR);
+        bugununayı = TarihDuzenleCal.get(Calendar.MONTH)+1;
+        bugunungunu = TarihDuzenleCal.get(Calendar.DAY_OF_MONTH);
+        TarihDuzenleCal.set(Calendar.MILLISECOND,0);
+        tarihduzenle.setText(bugunungunu + "/" + bugununayı + "/" + bugununyılı); }
+
+    @Override
+    public void onBackPressed() {
+        if (notduzenle.getText().toString().trim().equals("")) {
+            veriTabani.NotSil(idgor.getText().toString());
+        }
+        else
+        { veriTabani.NotGuncelle(idgor.getText().toString(), notduzenle.getText().toString(), tarihduzenle.getText().toString()); }
+
+        Intent git = new Intent(NotDuzenle.this, NotListele.class);
+        startActivity(git);
     }
 
     public void BtNotlarGit(View v) {
+        if (notduzenle.getText().toString().trim().equals("")) {
+            veriTabani.NotSil(idgor.getText().toString());
+        }
+        else
+        { veriTabani.NotGuncelle(idgor.getText().toString(), notduzenle.getText().toString(), tarihduzenle.getText().toString()); }
+
         Intent git = new Intent(NotDuzenle.this, NotListele.class);
         startActivity(git);
     }
 
     public void BtNotSil(View v) {
-        Integer notsil = veriTabani.NotSil(idgor.getText().toString());
-        if (notsil > 0) { Toast.makeText(NotDuzenle.this, "Not Silindi.", Toast.LENGTH_SHORT).show(); }
-        else { Toast.makeText(NotDuzenle.this, "Silme Başarısız!", Toast.LENGTH_SHORT).show(); }
-    }
+        veriTabani.NotSil(idgor.getText().toString());
 
-    public void BtNotGuncelle (View v) {
-        boolean kontrol = veriTabani.NotGuncelle(idgor.getText().toString(), notduzenle.getText().toString());
-        if (kontrol == true)
-        { Toast.makeText(NotDuzenle.this, "Not Güncellendi.", Toast.LENGTH_SHORT).show(); }
-        else { Toast.makeText(NotDuzenle.this, "Güncelleme Başarısız!", Toast.LENGTH_SHORT).show(); }
+        Intent git = new Intent(NotDuzenle.this, NotListele.class);
+        startActivity(git);
     }
 }
